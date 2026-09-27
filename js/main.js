@@ -10,8 +10,10 @@ const messageInput = document.getElementById("messageInput");
 let currentUser = null;
 let currentRoom = null;
 let signInMethod = "anonymous";
+let isLoading = false;
 
 document.addEventListener("DOMContentLoaded", () => {
+  loading(true);
   authenticateUser();
 });
 
@@ -54,27 +56,29 @@ auth.onAuthStateChanged(async (user) => {
 });
 
 function renderMessages(messages) {
-  messagesContainer.innerHTML = messages
-    .map((msg) => {
-      const timestamp = msg.timestamp;
-      if (!timestamp) return "";
+  messagesContainer.innerHTML =
+    messages
+      .map((msg) => {
+        const timestamp = msg.timestamp;
+        if (!timestamp) return "";
 
-      const isSelf = currentUser && msg.uid === currentUser.uid;
+        const isSelf = currentUser && msg.uid === currentUser.uid;
 
-      const timeString = getTimeString(msg.timestamp.seconds);
-      const senderName = isSelf ? "You" : escapeHTML(msg.senderName || "Anonymous");
-      const messageBody = escapeHTML(msg.text || "");
+        const timeString = getTimeString(msg.timestamp.seconds);
+        const senderName = isSelf ? "You" : escapeHTML(msg.senderName || "Anonymous");
+        const messageBody = escapeHTML(msg.text || "");
 
-      return `
+        return `
       <div class="message ${isSelf ? "sent" : "received"}">
         <div class="message-meta">${senderName}${timeString}</div>
         <div class="message-body">${messageBody}</div>
       </div>
     `;
-    })
-    .join("");
+      })
+      .join("") || "No messages";
 
   messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  loading(false);
 }
 
 // Handle sending messages
@@ -100,6 +104,7 @@ async function sendMessage() {
 }
 
 async function enterRoom(room) {
+  loading(true);
   room = room || roomInput.value || "general";
   currentRoom = room;
 
@@ -145,4 +150,10 @@ async function cleanupExpiredMessages() {
 
 function toggleMenuPanel() {
   menuPanel.classList.toggle("md-hidden");
+}
+
+function loading(state = true) {
+  isLoading = state;
+  const loadingModal = document.querySelector(".loading-modal");
+  loadingModal.classList.toggle("hidden", !state);
 }
