@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChatApp</title>
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link href="vendor/bootstrap-icons-1.13.1/bootstrap-icons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/main.css" />
+    <script src="vendor/firebasejs-10.10.0/firebase-app-compat.js" defer></script>
+    <script src="vendor/firebasejs-10.10.0/firebase-auth-compat.js" defer></script>
+    <script src="vendor/firebasejs-10.10.0/firebase-firestore-compat.js" defer></script>
+    <script src="js/constants.js" defer></script>
+    <script src="js/firebase.js" defer></script>
+    <script src="js/utils.js" defer></script>
+    <script src="js/main.js" defer></script>
+  </head>
+  <body class="dark-theme">
+    <div class="app container">
+      <!-- Sidebar Navigation -->
+      <div class="menu-panel sidebar">
+        <div class="sidebar-header">
+          <h2>ChatApp</h2>
+        </div>
+
+        <div class="profile-display">
+          <p class="name">Username</p>
+          <button class="button" onclick="editProfile()">Edit</button>
+        </div>
+
+        <div class="room-options">
+          <div class="room-input">
+            <input type="text" placeholder="Room name">
+            <button class="button" onclick="enterRoom()">Enter</button>
+          </div>
+
+          <p class="title">Recommended rooms</p>
+          <div class="room-list" id="roomList">
+            <div class="item" data-room="general" onclick="enterRoom('general')"># general</div>
+            <div class="item" data-room="random" onclick="enterRoom('random')"># random</div>
+            <div class="item" data-room="tech" onclick="enterRoom('tech')"># tech</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Panel -->
+      <div class="chat-panel">
+        <div class="chat-header">
+          <button class="menu-btn" onclick="toggleMenuPanel()"><i class="bi bi-list"></i></button>
+          <p class="title">Room name</p>
+        </div>
+
+        <div class="messages-container" id="messagesContainer">
+          <!-- Dynamic messages go here -->
+        </div>
+
+        <div class="message-input">
+          <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off" required />
+          <button class="button" onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
